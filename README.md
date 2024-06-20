@@ -729,7 +729,32 @@ int main() {
 Given coordinates x,y and radius r of two circle. Find the area of intersection between them. Print area in double with 6 digit precision.
 </summary>
 <br>
-[Answer]
+
+```C++
+const double PI = acos(-1.0);
+
+double areaOfIntersection(double x1, double y1, double r1, double x2, double y2, double r2) {
+    // Calculate distance between centers
+    double d = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+
+    // Check if circles do not intersect at all
+    if (d >= r1 + r2) return 0.0;
+
+    // Check if one circle is completely inside another
+    if (d + r1 <= r2) return PI * r1 * r1;
+    if (d + r2 <= r1) return PI * r2 * r2;
+
+    // Calculate areas using trigonometric formulas
+    double A1 = r1 * r1 * acos((d * d + r1 * r1 - r2 * r2) / (2 * d * r1));
+    double A2 = r2 * r2 * acos((d * d + r2 * r2 - r1 * r1) / (2 * d * r2));
+    double A3 = 0.5 * sqrt((-d + r1 + r2) * (d + r1 - r2) * (d - r1 + r2) * (d + r1 + r2));
+
+    // Total area of intersection
+    double intersectionArea = A1 + A2 - A3;
+    return intersectionArea;
+}
+```
+
 <br>
 </details>
 
@@ -750,7 +775,19 @@ explanation: range [1,5],[6,7] are covered by at least one range
 Sort array elements by their frequency and in case of tie, keep the order they arrive in the original array.
 </summary>
 <br>
-[Answer]
+
+```
+Approach:
+Counting Frequencies: Use a hash map (unordered_map) to count the frequency of each element in the array.
+
+Custom Comparator: Define a custom comparator function to sort elements:
+
+Compare elements first by their frequency (higher frequency first).
+If two elements have the same frequency, compare their first appearance order in the original array.
+Sorting: Utilize the std::sort function from the <algorithm> library with the custom comparator.
+
+Implementation: Iterate through the array, count frequencies, and then sort using the defined custom comparator.
+```
 <br>
 </details>
 
@@ -822,7 +859,9 @@ Given an array of thresholds. For each threshold print the first negative number
 What happens when you type google.com and press enter in your search bar
 </summary>
 <br>
-[Answer]
+
+```https://www.youtube.com/watch?v=dh406O2v_1c```
+
 <br/>
 </details>
 
