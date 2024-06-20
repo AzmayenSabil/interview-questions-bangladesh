@@ -96,7 +96,19 @@ int RomanToArabic(string R){
 Given a string of characters. Reverse the string without using any library function.
 </summary>
 <br>
-[Answer]
+
+```C++
+void reverseString(string &str) {
+    int n = str.length();
+    for (int i = 0; i < n / 2; ++i) {
+        // Swap the characters at positions i and n-i-1
+        char temp = str[i];
+        str[i] = str[n - i - 1];
+        str[n - i - 1] = temp;
+    }
+}
+```
+
 <br>
 </details>
 
@@ -106,7 +118,36 @@ Given a string of characters. Reverse the string without using any library funct
 Given a string of characters. Check if the given string is a palindrome.
 </summary>
 <br>
-[Answer]
+
+```C++
+bool isPalindrome(const string &str) {
+    int n = str.length();
+    for (int i = 0; i < n / 2; ++i) {
+        if (str[i] != str[n - i - 1]) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+OR
+
+```C++
+bool isPalindrome(const string &str) {
+    int left = 0;
+    int right = str.length() - 1;
+    
+    while (left < right) {
+        if (str[left] != str[right]) {
+            return false;
+        }
+        left++;
+        right--;
+    }
+    return true;
+}
+```
+
 <br>
 </details>
 
@@ -115,7 +156,29 @@ Given a string of characters. Check if the given string is a palindrome.
 Given an positive integer n. Find the sum of even fibonacchi number upto nth term.
 </summary>
 <br>
-[Answer]
+
+```C++
+// Function to calculate the nth Fibonacci number using recursion
+int fibonacci(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Function to calculate the sum of even Fibonacci numbers up to the nth term using recursion
+int sumEvenFibonacci(int n, int current = 0, int sum = 0) {
+    int fib = fibonacci(current);
+    if (current >= n) {
+        return sum;
+    }
+    if (fib % 2 == 0) {
+        sum += fib;
+    }
+    return sumEvenFibonacci(n, current + 1, sum);
+}
+```
+
 <br>
 </details>
 
@@ -124,7 +187,18 @@ Given an positive integer n. Find the sum of even fibonacchi number upto nth ter
 Given a string of characters [0-9]. Convert it to integer.
 </summary>
 <br>
-[Answer]
+
+```C++
+int stringToInteger(const string &str) {
+    int result = 0;
+    for (char c : str) {
+        // Assuming the input string contains only valid characters [0-9]
+        result = result * 10 + (c - '0');
+    }
+    return result;
+}
+```
+
 <br>
 </details>
 
@@ -363,7 +437,24 @@ Find digits from a string( Leading zeroes doesn't get counted)
 </summary>
 <br>
 
-```
+```C++
+string extractDigits(const string &str) {
+    string result;
+    bool foundNonZero = false;
+
+    for (char c : str) {
+        if (isdigit(c)) {
+            if (c != '0' || foundNonZero) {
+                result += c;
+                if (c != '0') {
+                    foundNonZero = true;
+                }
+            }
+        }
+    }
+
+    return result;
+}
 ```
 
 </b>
@@ -449,7 +540,32 @@ For example, Input: ['1', '2', '3'] and ['4', '5', '6']
 Output: Output: ['5', '7', '9']
 </summary>
 <br>
-[Answer]
+
+```C++
+vector<char> addArrays(const vector<char>& num1, const vector<char>& num2) {
+    int n1 = num1.size();
+    int n2 = num2.size();
+    vector<char> result;
+
+    int i = n1 - 1, j = n2 - 1;
+    int carry = 0;
+
+    while (i >= 0 || j >= 0 || carry > 0) {
+        int digit1 = (i >= 0) ? (num1[i--] - '0') : 0;
+        int digit2 = (j >= 0) ? (num2[j--] - '0') : 0;
+        int sum = digit1 + digit2 + carry;
+        result.push_back('0' + (sum % 10));
+        carry = sum / 10;
+    }
+
+    // Reverse the result to get the correct order
+    reverse(result.begin(), result.end());
+
+    return result;
+}
+```
+
+
 <br>
 </details>
 
@@ -520,7 +636,35 @@ Then if selected there will be a technical interview.
 Given a string of lowercase characters. Find the count of characters which only occured once in the string.
 </summary>
 <br>
-[Answer]
+
+```C++
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string s = "aabbcde";
+    map<char, int> coun; // Use char as the key type
+    
+    // Count the frequency of each character in the string
+    for(int i = 0; i < s.size(); i++){
+        coun[s[i]]++;
+    }
+    
+    int ans = 0;
+    
+    // Count how many characters appear exactly once
+    for(auto x: coun){
+        if(x.second == 1){
+            ans++;        
+        }
+    }
+    
+    cout << ans << endl; // Output the result
+    
+    return 0;
+}
+```
+
 <br>
 </details>
 
@@ -529,7 +673,54 @@ Given a string of lowercase characters. Find the count of characters which only 
 Given n,Find all primes less than equal n.
 </summary>
 <br>
-[Answer]
+
+```C++
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> sieveOfEratosthenes(int n) {
+    vector<bool> isPrime(n + 1, true);  // Create a boolean array and initialize all entries as true
+    isPrime[0] = isPrime[1] = false;    // 0 and 1 are not prime numbers
+
+    for (int p = 2; p * p <= n; ++p) {  // Loop up to the square root of n
+        if (isPrime[p]) {
+            for (int i = p * p; i <= n; i += p) { // Mark all multiples of p as false
+                isPrime[i] = false;
+            }
+        }
+    }
+
+    vector<int> primes;
+    for (int i = 2; i <= n; ++i) {      // Collect all prime numbers
+        if (isPrime[i]) {
+            primes.push_back(i);
+        }
+    }
+
+    return primes;
+}
+
+int main() {
+    int n;
+    cout << "Enter the value of n: ";
+    cin >> n;
+
+    vector<int> primes = sieveOfEratosthenes(n);
+
+    cout << "Prime numbers less than or equal to " << n << " are:" << endl;
+    for (int prime : primes) {
+        cout << prime << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
+
+
+```
+
 <br>
 </details>
 
